@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>docker ui</title>
+  </head>
+  <body>
+    <h1>docker Container</h1>
+    <div class="Container"></div>
+  </body>
+  <script>
+    console.log("docker container");
+    const containerDiv = document.querySelector(".Container");
+
+    function loadContainers() {
+      containerDiv.innerHTML = "";
+      fetch("http://localhost:3000/list")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          data.forEach((container) => {
+            containerDiv.innerHTML += `
+          <h2>Container ID: ${container.Id}</h2>
+          <p>Names: ${container.Names.join(", ")}</p>
+            <p>Image: ${container.Image}</p>
+            <p>Status: ${container.State}</p>
+            ${
+              container.State === "exited"
+                ? `<button onclick="fetch('http://localhost:3000/start', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ Container: '${container.Names[0].substring(
+                    1
+                  )}' })
+                }).then(response => response.text()).then(data => {
+                  alert('Container Started: ' + data);
+                  loadContainers();
+                }).catch(error => {
+                  console.error('Error starting container:', error);
+                })">Start Container</button>`
+                : `
+              <button onclick="fetch('http://localhost:3000/stop', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ Container: '${container.Names[0].substring(
+                    1
+                  )}' })
+                }).then(response => response.text()).then(data => {
+                  alert('Container Stopped: ' + data);
+                  loadContainers();
+                }).catch(error => {
+                  console.error('Error stopping container:', error);
+                })">Stop Container</button>`
+            }
+            <hr/>
+          `;
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching docker containers:", error);
+        });
+    }
+
+    loadContainers();
+  </script>
+</html>
