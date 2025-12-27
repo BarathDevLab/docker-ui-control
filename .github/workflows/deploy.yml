@@ -1,0 +1,53 @@
+name: Deploy to Oracle VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 68.233.113.104
+          username: ubuntu
+          key: "-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEApUv9w+T+m8lFs7e4e70BqTP++JUQhJnUjt/xtv+BCsfC/oWP
+49Y5H/Mdl9jgr5rSUzLFWMOs/WlniuhaDn3MacbpZiGrU3RBCs+jWjB4QZQkT//9
+lvz/RAYGat++UfU9qV3hBtODPC62W5NRex22sZKqMBSSK8ofjJmw8091dV56VC9w
+wDmZISSbgPUiz4fill8ALU8BFruj3t//T6D1hne6McGwsbiAiyXiSfrw9aiQRcNL
+uW/ZXClIMCA1DZY3tfoTRHLe6BZl6Ul8TyBXNjg9IU63Koxv6CRA0APlMYwNPxPM
+wR8Duifd0kMzl6D4G2XxqtrHyGr6jeOj51MxRwIDAQABAoIBAAsrgXCAGacpXhPG
+RynaxzFJ7uGZdnj0yY+ww8LGrU+vLsFzARriWmXgUJBMUD1NobI27MMSJgR8ikoG
+vYnb0mPA1KYu1vGtb3UYPEUB9X5o+7M0QfdhYqvpbvxAi7nkxU/xT3Ld+YZS7xvC
+bsUlEuLDsyB1+L1gy+pSZcoWBS1IeHberXRCFahmpiOcZeqlyBuZddnCnKIP4iLF
+tCmgHi/FtFkSEhlvd8rPxBVGsa+1pOLYBuovQyCnAJHv/qsFVsNV1W8in0XibQtK
+a6Nz1UC3AQvS3+Baxb60lJNNnKgv8Z6prcpxsl437Eq6ic3CmUq77q2+1rSu1Bfp
+XY36HDECgYEA6ALYUHjsweALpEexATLr3CCnGJ2Q9XhLdb7FkBPjZOXVcRR6U2eR
+7pspx/hbvkkKGpNeXCyK3V7YbNRLKRmy7r2HeIaT0BXI7oupZV4DZopTGTEqjoq0
+srOHpZHirRzucJjhgGhaQ78kFS2RJ8fwgCm/OwdXrogAQ2yDdneamCMCgYEAtmNF
+YWPh8dENpKmve830OxktjPfNtQa6PInvQf3LricsFhXbAiPevlquITH6DPZDUwYo
+t3eSyVtqTC2/ghYbrUgHvGfG3ykkt70SzGtESLJG/8f9j+i3hD1hG87m1o4z/mHL
+r+FVhjgAcKoohBsfAiMPzHgb6NapBeU2ZVpQYo0CgYAM/gvLBdqMSNWeD320CXv3
+ycRRtpEljeT75QD/Pn3fapd3S6RGA2jCqeG/FwNcNo7gShxgoQXtu5/3CDRlStEg
+WXC6qR6h6nZkFWIZERizp09b+8rcTJwt3avc87xz4Ujg+U63eCCF5rBIl1KnnaS0
+KKJS1ehtF6ScIfmCqtP3bQKBgGDfX0V4INUonV99RRiz7mnJWLlMETV6akanWK4r
+WBia876TQyzi0nc2gNBe1Bo4Xs/lMJEp8IwEgvQNRG+awH6MCJfYYve6yabRxP9Q
+ZgdasX0/wvzBtV+GnmJ/xXnmM9WEKgSz4ZIVgp5UsopgQVsINmb60JAeG85mzTqN
++q4tAoGASwDIrN7qsVEYQ95L7oKmpnoWf7LVPpWBXuM3tCnNPkk4XHLJSs3l30Tb
+yZnLGdm5QrjU89bG+Luu9BwUl1fraiTCiHGyHk+6LOh6TxIkyYJpnJ++gSnPR/xQ
+YYJNOWe9zyRwq5sijYDZG68gMIuXENxVh3F1j0rQN6EeGIjPIBU=
+-----END RSA PRIVATE KEY-----"
+          script: |
+            
+            docker pull bharath33/docker-ui:latest
+            docker stop docker-ui || true
+            docker rm docker-ui || true
+            docker run -d -p 3000:3000 --name docker-ui bharath33/docker-ui:latest
