@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.ORACLE_SSH_KEY }}
           script: |
 
-            docker pull bharath33/docker-ui:latest
-            docker stop docker-ui || true
-            docker rm docker-ui || true
-            docker run -d -p 3000:3000 --name docker-ui bharath33/docker-ui:latest
+            sudo docker pull bharath33/docker-ui:latest
+            sudo docker stop docker-ui || true
+            sudo docker rm docker-ui || true
+            sudo docker run -d -p 3000:3000 --name docker-ui bharath33/docker-ui:latest
