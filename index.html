@@ -15,7 +15,7 @@
 
     function loadContainers() {
       containerDiv.innerHTML = "";
-      fetch("http://localhost:3000/list")
+      fetch("http://68.233.113.104:3000/list")
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
@@ -27,7 +27,7 @@
             <p>Status: ${container.State}</p>
             ${
               container.State === "exited"
-                ? `<button onclick="fetch('http://localhost:3000/start', {
+                ? `<button onclick="fetch('http://68.233.113.104:3000/start', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
@@ -42,7 +42,7 @@
                   console.error('Error starting container:', error);
                 })">Start Container</button>`
                 : `
-              <button onclick="fetch('http://localhost:3000/stop', {
+              <button onclick="fetch('http://68.233.113.104:3000/stop', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
